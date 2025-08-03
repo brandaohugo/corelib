@@ -1,0 +1,15 @@
+[project]
+name = "corelib"
+version = "0.1.0"
+requires-python = ">=3.10,<4.0"
+description = "Shared core library for Kluster services"
+authors = [
+    { name="RAAC", email="hugo.brandao@raac.com.br" }
+]
+dependencies = [
+    "sqlmodel<1.0.0,>=0.0.21",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

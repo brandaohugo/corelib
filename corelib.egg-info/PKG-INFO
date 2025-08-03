@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: corelib
+Version: 0.1.0
+Summary: Shared core library for Kluster services
+Author-email: RAAC <hugo.brandao@raac.com.br>
+Requires-Python: <4.0,>=3.10
+Requires-Dist: sqlmodel<1.0.0,>=0.0.21
