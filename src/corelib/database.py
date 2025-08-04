@@ -2,16 +2,15 @@ from fastapi import HTTPException
 from sqlmodel import Session, select
 from starlette import status
 
-from corelib.engine import engine
-
 
 
 class CRUDManager:
 
     model = None
 
-    def __init__(self, model, session: Session = None):
+    def __init__(self, model, engine, session: Session = None):
         self.model = model
+        self.engine = engine
         if not session:
             self.session = self.__get_session()
         else:
@@ -19,7 +18,7 @@ class CRUDManager:
 
     @staticmethod
     def __get_session():
-        return Session(engine)
+        return Session(self.engine)
 
     def __validate_field_exists(self, field: str) -> None:
         if field not in self.model.model_fields:
