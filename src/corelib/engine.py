@@ -1,7 +1,5 @@
 from sqlalchemy import create_engine
 
+from corelib.config import settings
 
-def get_engine(sqlalchemy_db_url: str):
-    return create_engine(
-        sqlalchemy_db_url
-    )
+engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
