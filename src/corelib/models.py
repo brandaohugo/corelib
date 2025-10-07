@@ -5,13 +5,15 @@ from .types import BaseType
 from .utils import camel_to_snake
 
 
-class Base(BaseType, SQLModel, table=False):
+class BaseModel(SQLModel, table=False):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
     @declared_attr
     def __tablename__(cls) -> str:
         return camel_to_snake(cls.__name__)
 
+class Base(BaseType, BaseModel, table=False):
+    pass
 
 # Generic message
 class Message(SQLModel):
