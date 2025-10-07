@@ -1,10 +1,12 @@
-import uuid
-from typing import Optional, List, Dict, Any
+from typing import Optional
 from datetime import datetime
+import uuid
+from sqlmodel import SQLModel
 
 
-class BaseType:
-    id: Optional[uuid.UUID] = None
+
+class BaseType(SQLModel, table=False):
+    id: uuid.UUID
     ext_id: Optional[str] = None
     ext_source_id: Optional[str] = None
     created_at: datetime
@@ -14,7 +16,7 @@ class BaseType:
 
 
 class ContactBase(BaseType):
-    customer: "CustomerBase"
+    customer_id: uuid.UUID
     first_name: str
     last_name: str
     email: Optional[str] = None
@@ -25,22 +27,14 @@ class ContactBase(BaseType):
 class CustomerBase(BaseType):
     name: str
     registration: Optional[str] = None
-    website: Optional[str] = None
     address: Optional[str] = None
-    contacts: List["ContactBase"] = None
-    deals: List["DealBase"] = None
+    # contacts: List["ContactBase"] = None
 
 
 class DealBase(BaseType):
-    title: Optional[str] = None
-    object: Optional[str] = None
-    customer: Optional[CustomerBase] = None
-    contacts: List[ContactBase] = None
-    active: bool = None
-    stage_id: Optional[int] = None
+    title: str
+    object: str
+    customer_id: uuid.UUID
     status: Optional[str] = None
-    lost_reason: Optional[str] = None
-    user_id: Optional[int] = None
-    price: Optional[float] = None
-    expected_close_date: Optional[datetime] = None
-    custom_fields: Optional[Dict[str, Any]] = None
+    user_id: uuid.UUID
+    price: float = 0
