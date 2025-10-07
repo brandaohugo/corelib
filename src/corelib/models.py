@@ -1,13 +1,11 @@
 import uuid
-
 from sqlmodel import Field, SQLModel
 from sqlalchemy.ext.declarative import declared_attr
-
+from .types import BaseType
 from .utils import camel_to_snake
 
 
-
-class Base(SQLModel, table=False):
+class Base(BaseType, SQLModel, table=False):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
     @declared_attr
