@@ -35,8 +35,8 @@ class CRUDManager:
             detail=detail,
         )
 
-    def get_all(self, session: Session, skip: int = 0, limit: int = 100,):
-        return session.exec(select(self.model).offset(skip).limit(limit)).all()
+    def get_all(self, skip: int = 0, limit: int = 100,):
+        return self.session.exec(select(self.model).offset(skip).limit(limit)).all()
 
     def get(self, object_id):
         query = select(self.model).where(self.model.id == object_id)

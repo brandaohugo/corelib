@@ -28,7 +28,6 @@ class CustomerBase(BaseType):
     name: str
     registration: Optional[str] = None
     address: Optional[str] = None
-    # contacts: List["ContactBase"] = None
 
 
 class DealBase(BaseType):
