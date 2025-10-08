@@ -28,6 +28,6 @@ def create_app(settings, api_router):
 
     health_check_router = make_health_check_router()
 
+    api_router.include_router(health_check_router, prefix="/utils")
     app.include_router(api_router, prefix=settings.API_V1_STR)
-    app.include_router(health_check_router, prefix="/utils")
     return app
