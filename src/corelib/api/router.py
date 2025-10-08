@@ -2,8 +2,8 @@ from typing import Any
 
 from fastapi import APIRouter
 
-from src.corelib.db import CRUDManager
-from src.corelib.db import SessionDep
+from corelib.db import CRUDManager
+from corelib.db import SessionDep
 
 
 
