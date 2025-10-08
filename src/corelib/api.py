@@ -3,8 +3,8 @@ from typing import Any, Generator, Annotated
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
 
-from db import CRUDManager
-from engine import engine
+from .db import CRUDManager
+from .engine import engine
 
 
 def get_session() -> Generator[Session, None, None]:
