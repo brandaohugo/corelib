@@ -1,3 +1,4 @@
+import datetime
 
 from fastapi import HTTPException
 from sqlmodel import Session, select
@@ -47,6 +48,7 @@ class CRUDManager:
         return self.session.exec(query).one_or_none()
 
     def create(self, object_data):
+        object_data["created_at"] = object_data["updated_at"] = datetime.datetime.now(datetime.UTC)
         obj = self.model.model_validate(object_data)
         self.session.add(obj)
         self.session.commit()
@@ -72,6 +74,7 @@ class CRUDManager:
     def update(self, update_object):
         db_object = self.get_or_404(update_object.id)
         new_data = update_object.model_dump(exclude_unset=True)
+        db_object.updated_at = datetime.datetime.now(datetime.UTC)
         db_object.sqlmodel_update(new_data)
         self.session.add(db_object)
         self.session.commit()
