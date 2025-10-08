@@ -48,7 +48,7 @@ class CRUDManager:
         return self.session.exec(query).one_or_none()
 
     def create(self, object_data):
-        object_data["created_at"] = object_data["updated_at"] = datetime.datetime.now(datetime.timezone.utc)
+        object_data.created_at = object_data.updated_at = datetime.datetime.now(datetime.timezone.utc)
         obj = self.model.model_validate(object_data)
         self.session.add(obj)
         self.session.commit()
