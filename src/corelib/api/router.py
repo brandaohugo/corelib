@@ -20,6 +20,7 @@ def make_health_check_router():
 def make_crud_router(
     *,
     router_prefix: str,
+    tags: list[str] = [],
     Model: type = None,
     ModelsPublic: type = None,
     ModelPublic: type = None,
@@ -31,7 +32,7 @@ def make_crud_router(
     get_all_count_field: str = "count",
     id_field: str = "id"
 ) -> APIRouter:
-    router = APIRouter(prefix=router_prefix, tags=[Model.__name__+"s"])
+    router = APIRouter(prefix=router_prefix, tags=tags)
 
     if ModelsPublic and ModelInListPublic:
         @router.get("/", response_model=ModelsPublic)
