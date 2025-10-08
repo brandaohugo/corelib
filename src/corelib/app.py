@@ -2,7 +2,7 @@
 import sentry_sdk
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-
+from corelib.api.router import make_health_check_router
 from .utils import custom_generate_unique_id
 
 def create_app(settings, api_router):
@@ -26,5 +26,8 @@ def create_app(settings, api_router):
             allow_headers=["*"],
         )
 
+    health_check_router = make_health_check_router()
+
     app.include_router(api_router, prefix=settings.API_V1_STR)
+    app.include_router(health_check_router, prefix="/utils")
     return app
