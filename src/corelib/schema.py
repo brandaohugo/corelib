@@ -27,6 +27,7 @@ class DealCreate(DealBase, SQLModel):
 class DealDelete(SQLModel):
     id: uuid.UUID
 
+
 # CUSTOMER SCHEMA
 class CustomerPublic(CustomerBase, SQLModel):
     id: uuid.UUID
@@ -41,6 +42,12 @@ class CustomersPublic(CustomerBase, SQLModel):
 
 class CustomerUpdate(CustomerBase, SQLModel):
     pass
+
+class CustomerCreate(CustomerBase, SQLModel):
+    pass
+
+class CustomerDelete(SQLModel):
+    id: uuid.UUID
 
 
 # CONTACT SCHEMA
@@ -57,3 +64,9 @@ class ContactsPublic(ContactBase, SQLModel):
 
 class ContactUpdate(ContactBase, SQLModel):
     pass
+
+class ContactCreate(ContactBase, SQLModel):
+    pass
+
+class ContactDelete(SQLModel):
+    id: uuid.UUID
