@@ -31,7 +31,7 @@ def make_crud_router(
     get_all_count_field: str = "count",
     id_field: str = "id"
 ) -> APIRouter:
-    router = APIRouter(prefix=router_prefix)
+    router = APIRouter(prefix=router_prefix, tags=[Model.__name__+"s"])
 
     if ModelsPublic and ModelInListPublic:
         @router.get("/", response_model=ModelsPublic)
