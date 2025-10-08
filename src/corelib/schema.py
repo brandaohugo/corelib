@@ -6,7 +6,7 @@ from sqlmodel import SQLModel
 
 # DEAL SCHEMA
 class DealPublic(DealBase, SQLModel):
-    pass
+    id: uuid.UUID
 
 
 class DealInListPublic(DealPublic):
@@ -20,6 +20,12 @@ class DealsPublic(SQLModel):
 class DealUpdate(DealBase, SQLModel):
     pass
 
+class DealCreate(DealBase, SQLModel):
+    title: str
+    object: str
+
+class DealDelete(SQLModel):
+    id: uuid.UUID
 
 # CUSTOMER SCHEMA
 class CustomerPublic(CustomerBase, SQLModel):

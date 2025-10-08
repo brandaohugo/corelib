@@ -6,7 +6,6 @@ from sqlmodel import SQLModel
 
 
 class BaseType(SQLModel, table=False):
-    id: uuid.UUID
     ext_id: Optional[str] = None
     ext_source_id: Optional[str] = None
     created_at: datetime
