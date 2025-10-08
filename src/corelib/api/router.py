@@ -14,6 +14,8 @@ def make_health_check_router():
     async def health_check() -> bool:
         return True
 
+    return router
+
 
 def make_crud_router(
     *,
