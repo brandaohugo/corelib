@@ -36,7 +36,7 @@ class CustomerPublic(CustomerBase, SQLModel):
 class CustomerInListPublic(CustomerPublic):
     pass
 
-class CustomersPublic(CustomerBase, SQLModel):
+class CustomersPublic(SQLModel):
     data: list[CustomerInListPublic]
     count: int
 
@@ -58,7 +58,7 @@ class ContactPublic(ContactBase, SQLModel):
 class ContactInListPublic(ContactPublic):
     pass
 
-class ContactsPublic(ContactBase, SQLModel):
+class ContactsPublic(SQLModel):
     data: list[ContactInListPublic]
     count: int
 
