@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 from fastapi import HTTPException
 from sqlmodel import Session, select
@@ -47,8 +48,9 @@ class CRUDManager:
             return self.session.exec(query).all()
         return self.session.exec(query).one_or_none()
 
-    def create(self, object_data):
+    def create(self, object_data, user_id):
         object_data.created_at = object_data.updated_at = datetime.datetime.now(datetime.timezone.utc)
+        object_data.created_by = object_data.updated_by = user_id
         obj = self.model.model_validate(object_data)
         self.session.add(obj)
         self.session.commit()
@@ -59,6 +61,7 @@ class CRUDManager:
         if isinstance(object_data, dict):
             object_data = self.model(**object_data)
         self.__validate_field_exists(search_field)
+        user_id = uuid.uuid4()
         if obj := self.get_by_field(
                 search_field,
                 getattr(object_data, search_field),
@@ -66,15 +69,16 @@ class CRUDManager:
             new_object = self.model.model_validate(object_data)
             new_object.id = obj.id
 
-            self.update(new_object)
+            self.update(new_object, user_id)
             return new_object
         else:
-            return self.create(object_data)
+            return self.create(object_data, user_id)
 
-    def update(self, update_object):
+    def update(self, update_object, user_id):
         db_object = self.get_or_404(update_object.id)
         new_data = update_object.model_dump(exclude_unset=True)
         db_object.updated_at = datetime.datetime.now(datetime.timezone.utc)
+        db_object.updated_by = user_id
         db_object.sqlmodel_update(new_data)
         self.session.add(db_object)
         self.session.commit()
