@@ -57,11 +57,10 @@ class CRUDManager:
         self.session.refresh(obj)
         return obj
 
-    def create_or_update(self, object_data, search_field: str = "id",):
+    def create_or_update(self, object_data, user_id, search_field: str = "id",):
         if isinstance(object_data, dict):
             object_data = self.model(**object_data)
         self.__validate_field_exists(search_field)
-        user_id = uuid.uuid4()
         if obj := self.get_by_field(
                 search_field,
                 getattr(object_data, search_field),
