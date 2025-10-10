@@ -31,6 +31,7 @@ class Settings(BaseSettings):
         env_ignore_empty=True,
         extra="ignore",
     )
+
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str
     # 60 minutes * 24 hours * 8 days = 8 days
@@ -56,6 +57,9 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = "postgres"
     POSTGRES_PASSWORD: str = ""
     POSTGRES_DB: str = ""
+
+    SYSTEM_USER: str | None = "system@fro.raac.com.br"
+    SYSTEM_USER_PASSWORD: str | None = "ababelado"
 
     @computed_field  # type: ignore[prop-decorator]
     @property
