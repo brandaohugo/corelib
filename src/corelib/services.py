@@ -2,7 +2,7 @@ import httpx
 
 
 async def login_and_get_user(email: str, password: str) -> dict:
-    url = "http://auth-users:8000/api/v1/users/login"  # Adjust port and host as needed for your docker setup
+    url = "http://auth-users:8000/api/v1/login/access-token"  # Adjust port and host as needed for your docker setup
     payload = {
         "email": email,
         "password": password
