@@ -1,28 +1,41 @@
 import requests
 
 
-def login_and_get_user(email: str, password: str) -> dict | None:
+def read_me(email: str, password: str) -> dict | None:
     """
-    Perform a sync login request and return only user data as dict.
-    Returns None if login fails (invalid credentials or server error).
+    Log in to get an access token, then fetch user data from /users/me endpoint.
+    Returns user data dict, or None if any step fails.
     """
-    url = "http://auth-users:8000/api/v1/users/login"  # Use Docker service name and internal port
+    # 1. Login to get token
+    url_token = "http://auth-users:8000/api/v1/login/access-token"
     payload = {
-        "email": email,
+        "username": email,      # must be "username", not "email"
         "password": password
     }
     try:
-        resp = requests.post(url, json=payload, timeout=5)
+        resp = requests.post(
+            url_token,
+            data=payload,
+            timeout=5
+        )
         resp.raise_for_status()
-        result = resp.json()
-        # Return only the user data as dict
-        return result
-    except requests.HTTPError as err:
-        # Optional: inspect err.response for API error details
-        print(f"Login failed: {err}")
-    except requests.RequestException as err:
-        print(f"Error connecting to auth-users: {err}")
+        # Note: spelling fix for "access_token"
+        token = resp.json()["access_token"]
     except Exception as err:
-        print(f"Unexpected error: {err}")
-    return None
+        print(f"Login failed: {err}")
+        return None
+
+    # 2. Use token to call /users/me (or /me)
+    url_me = "http://auth-users:8000/api/v1/users/me"
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    try:
+        resp = requests.get(url_me, headers=headers, timeout=5)
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as err:
+        print(f"Fetching user data failed: {err}")
+        return None
+
 
