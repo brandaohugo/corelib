@@ -2,7 +2,7 @@ import httpx
 
 
 async def fetch_user_by_username(username: str) -> dict:
-    url = f"http://auth-users:8002/api/v1/users/read-user/{username}"
+    url = f"http://localhost:8002/api/v1/users/read-user/{username}" #TODO: fix this
     async with httpx.AsyncClient() as client:
         resp = await client.get(url)
         resp.raise_for_status()
