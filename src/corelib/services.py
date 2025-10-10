@@ -1,33 +1,28 @@
-import httpx
-import asyncio
+import requests
 
-async def login_and_get_user_async(email: str, password: str) -> dict:
-    url = "http://auth-users:8000/api/v1/users/login"  # Adjust as needed
+
+def login_and_get_user(email: str, password: str) -> dict | None:
+    """
+    Perform a sync login request and return only user data as dict.
+    Returns None if login fails (invalid credentials or server error).
+    """
+    url = "http://auth-users:8000/api/v1/users/login"  # Use Docker service name and internal port
     payload = {
         "email": email,
         "password": password
     }
-    async with httpx.AsyncClient() as client:
-        resp = await client.post(url, json=payload)
-        resp.raise_for_status()
-        return resp.json()
-
-def login_and_get_user(email: str, password: str) -> dict:
-    """
-    Synchronous wrapper for async function.
-    Can be called from sync or async code.
-    """
     try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = None
-
-    if loop and loop.is_running():
-        # If we're in an event loop, the caller should use await directly!
-        # Raise error or return coroutine:
-        raise RuntimeError("login_and_get_user must be awaited in async contexts.")
-        # Or: return login_and_get_user_async(email, password)
-    else:
-        # Safe to use asyncio.run in sync context
-        return asyncio.run(login_and_get_user_async(email, password))
+        resp = requests.post(url, json=payload, timeout=5)
+        resp.raise_for_status()
+        result = resp.json()
+        # Return only the user data as dict
+        return result
+    except requests.HTTPError as err:
+        # Optional: inspect err.response for API error details
+        print(f"Login failed: {err}")
+    except requests.RequestException as err:
+        print(f"Error connecting to auth-users: {err}")
+    except Exception as err:
+        print(f"Unexpected error: {err}")
+    return None
 
