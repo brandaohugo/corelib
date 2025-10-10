@@ -1,14 +1,16 @@
 import httpx
 
 
-async def fetch_user_by_username(username: str) -> dict:
-    url = f"http://localhost:8002/api/v1/users/read-user/{username}" #TODO: fix this
+async def login_and_get_user(email: str, password: str) -> dict:
+    url = "http://auth-users:8000/api/v1/users/login"  # Adjust port and host as needed for your docker setup
+    payload = {
+        "email": email,
+        "password": password
+    }
     async with httpx.AsyncClient() as client:
-        resp = await client.get(url)
+        resp = await client.post(url, json=payload)
         resp.raise_for_status()
         result = resp.json()
-        # Assuming the user data is directly in the response or under "data"
-        if isinstance(result, dict):
-            # Adjust key as needed if your user data is wrapped, e.g. result["data"]
-            return result.get("data", result)
+        # Assuming user data is returned directly as a dict
         return result
+
