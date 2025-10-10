@@ -2,7 +2,7 @@ import httpx
 import asyncio
 
 async def login_and_get_user_async(email: str, password: str) -> dict:
-    url = "http://localhost:8002/api/v1/users/login"  # Adjust as needed
+    url = "http://auth-users:8000/api/v1/users/login"  # Adjust as needed
     payload = {
         "email": email,
         "password": password
