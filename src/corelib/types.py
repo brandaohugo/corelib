@@ -15,7 +15,7 @@ class BaseType(SQLModel, table=False):
 
 
 class ContactBase(BaseType):
-    customer_id: uuid.UUID
+    customer_id: Optional[uuid.UUID] = None
     first_name: str
     last_name: str
     email: Optional[str] = None
