@@ -58,7 +58,7 @@ class CRUDManager:
         self.session.refresh(obj)
         return obj
 
-    def create_or_update(self, object_data, user_id, search_field: str = "id",):
+    def create_or_update(self, object_data, user_id, stamp=True, search_field: str = "id",):
         if isinstance(object_data, dict):
             object_data = self.model(**object_data)
         self.__validate_field_exists(search_field)
@@ -69,10 +69,10 @@ class CRUDManager:
             new_object = self.model.model_validate(object_data)
             new_object.id = obj.id
 
-            self.update(new_object, user_id)
+            self.update(new_object, user_id, stamp=stamp)
             return new_object
         else:
-            return self.create(object_data, user_id)
+            return self.create(object_data, user_id, stamp=stamp)
 
     def update(self, update_object, user_id, stamp=True):
         db_object = self.get_or_404(update_object.id)
