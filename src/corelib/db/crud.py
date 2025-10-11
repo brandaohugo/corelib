@@ -48,8 +48,9 @@ class CRUDManager:
             return self.session.exec(query).all()
         return self.session.exec(query).one_or_none()
 
-    def create(self, object_data, user_id):
-        object_data.created_at = object_data.updated_at = datetime.datetime.now(datetime.timezone.utc)
+    def create(self, object_data, user_id, stamp=True):
+        if stamp:
+            object_data.created_at = object_data.updated_at = datetime.datetime.now(datetime.timezone.utc)
         object_data.created_by = object_data.updated_by = user_id
         obj = self.model.model_validate(object_data)
         self.session.add(obj)
@@ -73,10 +74,11 @@ class CRUDManager:
         else:
             return self.create(object_data, user_id)
 
-    def update(self, update_object, user_id):
+    def update(self, update_object, user_id, stamp=True):
         db_object = self.get_or_404(update_object.id)
         new_data = update_object.model_dump(exclude_unset=True)
-        db_object.updated_at = datetime.datetime.now(datetime.timezone.utc)
+        if stamp:
+            db_object.updated_at = datetime.datetime.now(datetime.timezone.utc)
         db_object.updated_by = user_id
         db_object.sqlmodel_update(new_data)
         self.session.add(db_object)
