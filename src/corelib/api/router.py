@@ -1,7 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter
-
+from fastapi import APIRouter, Query
 from corelib.db import CRUDManager
 from corelib.db import SessionDep
 
@@ -36,8 +35,12 @@ def make_crud_router(
 
     if ModelsPublic and ModelInListPublic:
         @router.get("/", response_model=ModelsPublic)
-        def read_all(session: SessionDep) -> Any:
-            objs = CRUDManager(Model, session).get_all()
+        def read_all(
+            session: SessionDep,
+            skip: int = Query(0, ge=0, description="How many items to skip"),
+            limit: int = Query(100, ge=1, le=1000, description="Maximum number of items to return"),
+        ) -> Any:
+            objs = CRUDManager(Model, session).get_all(skip=skip, limit=limit)
             return ModelsPublic(**{
                 get_all_response_field: [ModelInListPublic.model_validate(obj) for obj in objs],
                 get_all_count_field: len(objs)
