@@ -32,7 +32,7 @@ class CustomerBase(BaseType):
 class DealBase(BaseType):
     title: str
     object: str
-    customer_id: uuid.UUID
+    customer_id: Optional[uuid.UUID] = None
     status: Optional[str] = None
     user_id: uuid.UUID
     price: float = 0
