@@ -1,6 +1,8 @@
-from typing import Any
+from functools import wraps
+from typing import Any, Optional
 
 from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
 from corelib.db import CRUDManager
 from corelib.db import SessionDep
 
@@ -14,6 +16,29 @@ def make_health_check_router():
         return True
 
     return router
+
+def standard_json_response(
+    data: Optional[Any] = None,
+    success: bool = True,
+    error: Optional[str] = None,
+    status_code: int = 200
+) -> JSONResponse:
+    resp = {
+        "success": success,
+        "data": data if success else None,
+        "error": error if not success else None
+    }
+    return JSONResponse(content=resp, status_code=status_code)
+
+def safe_json_response(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+            return standard_json_response(data=result)
+        except Exception as exc:
+            return standard_json_response(success=False, error=str(exc), status_code=500)
+    return wrapper
 
 
 def make_crud_router(
@@ -35,6 +60,7 @@ def make_crud_router(
 
     if ModelsPublic and ModelInListPublic:
         @router.get("/", response_model=ModelsPublic)
+        @safe_json_response
         def read_all(
             session: SessionDep,
             skip: int = Query(0, ge=0, description="How many items to skip"),
@@ -48,18 +74,21 @@ def make_crud_router(
 
     if ModelPublic:
         @router.get("/{id}", response_model=ModelPublic)
+        @safe_json_response
         def read_one(id: str, session: SessionDep) -> Any:
             obj = CRUDManager(Model, session).get_or_404(id)
             return ModelPublic.model_validate(obj)
 
     if ModelPublic and ModelCreate:
         @router.post("/", response_model=ModelPublic)
+        @safe_json_response
         def create(obj_in: ModelCreate, session: SessionDep) -> Any:
             obj = CRUDManager(Model, session).create(obj_in)
             return ModelPublic.model_validate(obj)
 
     if ModelPublic and ModelUpdate:
         @router.put("/{id}", response_model=ModelPublic)
+        @safe_json_response
         def update(id: str, obj_in: ModelUpdate, session: SessionDep) -> Any:
             manager = CRUDManager(Model, session)
             old_obj = manager.get_or_404(id)
@@ -73,6 +102,7 @@ def make_crud_router(
 
     if ModelDelete:
         @router.delete("/{id}", response_model=ModelDelete)
+        @safe_json_response
         def delete(id: str, session: SessionDep):
             manager = CRUDManager(Model, session)
             obj = manager.delete(session, id)
