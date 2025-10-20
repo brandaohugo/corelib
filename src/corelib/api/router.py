@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from corelib.db import CRUDManager, SessionDep
 
 from corelib.schema import JSONResponseModel
+from sqlmodel import SQLModel
 
 
 def make_health_check_router():
@@ -46,11 +47,11 @@ def make_crud_router(
     *,
     router_prefix: str,
     tags: list[str] = [],
-    Model: type = None,
-    ModelPublic: type = None,
-    ModelCreate: type = None,
-    ModelUpdate: type = None,
-    ModelDelete: type = None,
+    Model: SQLModel = None,
+    ModelPublic: SQLModel = None,
+    ModelCreate: SQLModel = None,
+    ModelUpdate: SQLModel = None,
+    ModelDelete: SQLModel = None,
 ) -> APIRouter:
     router = APIRouter(prefix=router_prefix, tags=tags)
 
@@ -62,7 +63,7 @@ def make_crud_router(
         limit: int = Query(100, ge=1, le=1000, description="Maximum number of items to return"),
     ) -> Any:
         objs = CRUDManager(Model, session).get_all(skip=skip, limit=limit)
-        return [ModelPublic.model_validate(obj) for obj in objs]
+        return [ModelPublic.model_validate(obj).model_dump() for obj in objs]
 
     @router.get("/{id}", response_model=JSONResponseModel[ModelPublic])
     @safe_json_response
