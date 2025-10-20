@@ -18,7 +18,7 @@ def make_health_check_router():
     return router
 
 def standard_json_response(
-    data: Optional[Any] = None,
+    data: List[Any] = None,
     success: bool = True,
     error: Optional[str] = None,
     status_code: int = 200
@@ -36,7 +36,7 @@ def safe_json_response(func):
     def wrapper(*args, **kwargs):
         try:
             data = func(*args, **kwargs)
-            return standard_json_response(data=data, count=len(data))
+            return standard_json_response(data=data)
         except Exception as exc:
             return standard_json_response(success=False, error=str(exc), status_code=500, data=[])
     return wrapper
