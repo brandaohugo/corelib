@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
 from corelib.db import CRUDManager, SessionDep
 
-from src.corelib.schema import JSONResponseModel
+from corelib.schema import JSONResponseModel
 
 
 def make_health_check_router():
