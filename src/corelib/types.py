@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 from datetime import datetime
 import uuid
 from sqlmodel import SQLModel
@@ -36,3 +36,4 @@ class DealBase(BaseType):
     status: Optional[str] = None
     user_id: uuid.UUID
     price: float = 0
+    fields: Dict[str, Any] = {}

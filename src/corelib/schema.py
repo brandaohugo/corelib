@@ -2,20 +2,23 @@ from .types import DealBase, CustomerBase, ContactBase
 import uuid
 
 from sqlmodel import SQLModel
+from typing import Generic, TypeVar, Optional
+from pydantic.generics import GenericModel
+
+
+T = TypeVar("T")
+
+class JSONResponseModel(GenericModel, Generic[T]):
+    data: Optional[T] = None
+    count: Optional[int] = None
+    success: bool = True
+    error: Optional[str] = None
 
 
 # DEAL SCHEMA
 class DealPublic(DealBase, SQLModel):
     id: uuid.UUID
 
-
-class DealInListPublic(DealPublic):
-    pass
-
-
-class DealsPublic(SQLModel):
-    data: list[DealInListPublic]
-    count: int
 
 class DealUpdate(DealBase, SQLModel):
     pass
