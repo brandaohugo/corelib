@@ -38,7 +38,7 @@ def safe_json_response(func):
             data = func(*args, **kwargs)
             return standard_json_response(data=data, count=len(data))
         except Exception as exc:
-            return standard_json_response(success=False, error=str(exc), status_code=500)
+            return standard_json_response(success=False, error=str(exc), status_code=500, data=[])
     return wrapper
 
 
