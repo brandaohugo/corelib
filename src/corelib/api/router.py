@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Any, Optional
+from typing import Any, Optional, List
 
 from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
@@ -50,9 +50,6 @@ def make_crud_router(
     ModelCreate: type = None,
     ModelUpdate: type = None,
     ModelDelete: type = None,
-    get_all_response_field: str = "data",
-    get_all_count_field: str = "count",
-    id_field: str = "id"
 ) -> APIRouter:
     router = APIRouter(prefix=router_prefix, tags=tags)
 
