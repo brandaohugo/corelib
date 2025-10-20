@@ -63,7 +63,7 @@ def make_crud_router(
         limit: int = Query(100, ge=1, le=1000, description="Maximum number of items to return"),
     ) -> Any:
         objs = CRUDManager(Model, session).get_all(skip=skip, limit=limit)
-        return [ModelPublic.model_validate(obj).model_dump() for obj in objs]
+        return [ModelPublic.model_validate(obj).model_dump(mode="json") for obj in objs]
 
     @router.get("/{id}", response_model=JSONResponseModel[ModelPublic])
     @safe_json_response
