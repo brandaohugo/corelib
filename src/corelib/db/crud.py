@@ -49,7 +49,7 @@ class CRUDManager:
         return self.session.exec(query).one_or_none()
 
     def create(self, object_data, user_id, stamp=True):
-        if stamp:
+        if stamp or object_data.created_at is None:
             object_data.created_at = object_data.updated_at = datetime.datetime.now(datetime.timezone.utc)
         object_data.created_by = object_data.updated_by = user_id
         obj = self.model.model_validate(object_data)
@@ -77,7 +77,7 @@ class CRUDManager:
     def update(self, update_object, user_id, stamp=True):
         db_object = self.get_or_404(update_object.id)
         new_data = update_object.model_dump(exclude_unset=True)
-        if stamp:
+        if stamp or update_object.updated_at is None:
             db_object.updated_at = datetime.datetime.now(datetime.timezone.utc)
         db_object.updated_by = user_id
         db_object.sqlmodel_update(new_data)
