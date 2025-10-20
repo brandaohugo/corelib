@@ -2,14 +2,14 @@ from .types import DealBase, CustomerBase, ContactBase
 import uuid
 
 from sqlmodel import SQLModel
-from typing import Generic, TypeVar, Optional
+from typing import Generic, TypeVar, Optional, List
 from pydantic.generics import GenericModel
 
 
 T = TypeVar("T")
 
 class JSONResponseModel(GenericModel, Generic[T]):
-    data: Optional[T] = None
+    data: List[T] = None
     count: Optional[int] = None
     success: bool = True
     error: Optional[str] = None
