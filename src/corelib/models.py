@@ -15,6 +15,11 @@ class BaseModel(SQLModel, table=False):
 class Base(BaseType, BaseModel, table=False):
     pass
 
+
+class BaseField(Base, table=False):
+    key: str = Field(max_length=255)
+    type: str = Field(max_length=255)
+
 # Generic message
 class Message(SQLModel):
     message: str
