@@ -5,6 +5,7 @@ from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
 from corelib.db import CRUDManager, SessionDep
 
+from src.corelib.schema import JSONResponseModel
 
 
 def make_health_check_router():
@@ -53,7 +54,7 @@ def make_crud_router(
 ) -> APIRouter:
     router = APIRouter(prefix=router_prefix, tags=tags)
 
-    @router.get("/", response_model=JSONResponse[List[ModelPublic]])
+    @router.get("/", response_model=JSONResponseModel[List[ModelPublic]])
     @safe_json_response
     def read_all(
         session: SessionDep,
@@ -63,21 +64,21 @@ def make_crud_router(
         objs = CRUDManager(Model, session).get_all(skip=skip, limit=limit)
         return [ModelPublic.model_validate(obj) for obj in objs]
 
-    @router.get("/{id}", response_model=JSONResponse[ModelPublic])
+    @router.get("/{id}", response_model=JSONResponseModel[ModelPublic])
     @safe_json_response
     def read_one(id: str, session: SessionDep) -> Any:
         obj = CRUDManager(Model, session).get_or_404(id)
         return ModelPublic.model_validate(obj)
 
     if ModelCreate:
-        @router.post("/", response_model=JSONResponse[ModelPublic])
+        @router.post("/", response_model=JSONResponseModel[ModelPublic])
         @safe_json_response
         def create(obj_in: ModelCreate, session: SessionDep) -> Any:
             obj = CRUDManager(Model, session).create(obj_in)
             return ModelPublic.model_validate(obj)
 
     if ModelUpdate:
-        @router.put("/{id}", response_model=JSONResponse[ModelPublic])
+        @router.put("/{id}", response_model=JSONResponseModel[ModelPublic])
         @safe_json_response
         def update(id: str, obj_in: ModelUpdate, session: SessionDep) -> Any:
             manager = CRUDManager(Model, session)
@@ -91,7 +92,7 @@ def make_crud_router(
             return ModelPublic.model_validate(old_obj)
 
     if ModelDelete:
-        @router.delete("/{id}", response_model=ModelDelete)
+        @router.delete("/{id}", response_model=JSONResponseModel[ModelDelete])
         @safe_json_response
         def delete(id: str, session: SessionDep):
             manager = CRUDManager(Model, session)
