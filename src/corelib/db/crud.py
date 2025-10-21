@@ -54,10 +54,11 @@ class CRUDManager:
         return self.session.exec(query).one_or_none()
 
     def get_by_fields(self, fields: dict, allows_multiple: bool = False,):
-        query = select(self.model)
         for field, value in fields.items():
             self.__validate_field_exists(field)
-            query.where(getattr(self.model, field) == value)
+        query = select(self.model)
+        conditions = [getattr(self.model, key) == value for key, value in fields.items()]
+        query = query.where(and_(*conditions))
         if allows_multiple:
             return self.session.exec(query).all()
         return self.session.exec(query).one_or_none()
