@@ -2,8 +2,7 @@ import datetime
 import uuid
 
 from fastapi import HTTPException
-from sqlmodel import Session
-from sqlalchemy import select, and_
+from sqlmodel import Session, select, and_
 from starlette import status
 
 
