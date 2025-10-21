@@ -2,7 +2,8 @@ import datetime
 import uuid
 
 from fastapi import HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session
+from sqlalchemy import select, and_
 from starlette import status
 
 
@@ -29,8 +30,13 @@ class CRUDManager:
             detail=detail,
         )
 
-    def get_all(self, skip: int = 0, limit: int = 100,):
-        return self.session.exec(select(self.model).offset(skip).limit(limit)).all()
+    def get_all(self, skip: int = 0, limit: int = 100, filters=None):
+        query = select(self.model)
+        if filters:
+            conditions = [getattr(self.model, key) == value for key, value in filters.items()]
+            query = query.where(and_(*conditions))
+        query = query.offset(skip).limit(limit)
+        return self.session.exec(query).all()
 
     def get(self, object_id):
         query = select(self.model).where(self.model.id == object_id)
