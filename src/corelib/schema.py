@@ -1,4 +1,4 @@
-from .types import DealBase, CustomerBase, ContactBase
+from .types import DealBase, CustomerBase, ContactBase, FieldBase
 import uuid
 
 from sqlmodel import SQLModel
@@ -60,6 +60,24 @@ class ContactUpdate(ContactBase, SQLModel):
 
 
 class ContactCreate(ContactBase, SQLModel):
+    pass
+
+
+class ContactDelete(SQLModel):
+    id: uuid.UUID
+
+
+
+# FIELD SCHEMA
+class FieldPublic(FieldBase, SQLModel):
+    id: uuid.UUID
+
+
+class FieldUpdate(FieldBase, SQLModel):
+    pass
+
+
+class FieldCreate(FieldBase, SQLModel):
     pass
 
 
