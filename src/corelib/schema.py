@@ -81,5 +81,5 @@ class FieldCreate(FieldBase, SQLModel):
     pass
 
 
-class ContactDelete(SQLModel):
+class FieldDelete(SQLModel):
     id: uuid.UUID
