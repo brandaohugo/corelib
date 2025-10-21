@@ -61,8 +61,12 @@ def make_crud_router(
         session: SessionDep,
         skip: int = Query(0, ge=0, description="How many items to skip"),
         limit: int = Query(100, ge=1, le=1000, description="Maximum number of items to return"),
+        entity: str = Query(None, description="Entity name"),
     ) -> Any:
-        objs = CRUDManager(Model, session).get_all(skip=skip, limit=limit)
+        filters = {}
+        if entity:
+            filters["entity"] = entity
+        objs = CRUDManager(Model, session).get_all(skip=skip, limit=limit, filters=filters)
         return [ModelPublic.model_validate(obj).model_dump(mode="json") for obj in objs]
 
     @router.get("/{id}", response_model=JSONResponseModel[ModelPublic])
