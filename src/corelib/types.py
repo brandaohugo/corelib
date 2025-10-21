@@ -1,8 +1,20 @@
+from enum import Enum
 from typing import Optional, Dict, Any
 from datetime import datetime
 import uuid
 from sqlmodel import SQLModel
 
+class FieldTypes(Enum):
+    string = "string"
+    float = "float"
+    integer = "integer"
+    boolean = "boolean"
+    date = "date"
+    datetime = "datetime"
+    time = "time"
+    enum = "enum"
+    json = "json"
+    uuid = "uuid"
 
 
 class BaseType(SQLModel, table=False):
@@ -12,6 +24,14 @@ class BaseType(SQLModel, table=False):
     updated_at: datetime
     created_by: uuid.UUID
     updated_by: uuid.UUID
+
+
+class FieldBase(BaseType):
+    key: Optional[str] = None
+    ext_key: Optional[str] = None
+    name: Optional[str] = None
+    value: Optional[any] = None
+    type: FieldTypes
 
 
 class ContactBase(BaseType):
