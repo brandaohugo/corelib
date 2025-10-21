@@ -23,9 +23,11 @@ class DealPublic(DealBase, SQLModel):
 class DealUpdate(DealBase, SQLModel):
     pass
 
+
 class DealCreate(DealBase, SQLModel):
     title: str
     object: str
+
 
 class DealDelete(SQLModel):
     id: uuid.UUID
@@ -36,18 +38,13 @@ class CustomerPublic(CustomerBase, SQLModel):
     id: uuid.UUID
 
 
-class CustomerInListPublic(CustomerPublic):
-    pass
-
-class CustomersPublic(SQLModel):
-    data: list[CustomerInListPublic]
-    count: int
-
 class CustomerUpdate(CustomerBase, SQLModel):
     pass
 
+
 class CustomerCreate(CustomerBase, SQLModel):
     pass
+
 
 class CustomerDelete(SQLModel):
     id: uuid.UUID
@@ -58,18 +55,13 @@ class ContactPublic(ContactBase, SQLModel):
     id: uuid.UUID
 
 
-class ContactInListPublic(ContactPublic):
-    pass
-
-class ContactsPublic(SQLModel):
-    data: list[ContactInListPublic]
-    count: int
-
 class ContactUpdate(ContactBase, SQLModel):
     pass
 
+
 class ContactCreate(ContactBase, SQLModel):
     pass
+
 
 class ContactDelete(SQLModel):
     id: uuid.UUID
