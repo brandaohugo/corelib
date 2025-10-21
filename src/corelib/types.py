@@ -30,7 +30,6 @@ class FieldBase(BaseType):
     key: Optional[str] = None
     ext_key: Optional[str] = None
     name: Optional[str] = None
-    value: Optional[any] = None
     type: FieldTypes
 
 
