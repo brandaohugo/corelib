@@ -53,6 +53,15 @@ class CRUDManager:
             return self.session.exec(query).all()
         return self.session.exec(query).one_or_none()
 
+    def get_by_fields(self, fields: dict, allows_multiple: bool = False,):
+        query = select(self.model)
+        for field, value in fields.items():
+            self.__validate_field_exists(field)
+            query.where(getattr(self.model, field) == value)
+        if allows_multiple:
+            return self.session.exec(query).all()
+        return self.session.exec(query).one_or_none()
+
     def create(self, object_data, user_id, stamp=True):
         if stamp or object_data.created_at is None:
             object_data.created_at = object_data.updated_at = datetime.datetime.now(datetime.timezone.utc)
